@@ -2,11 +2,11 @@ There are two Python files here each containing a custom Instagram class
 
 # InstagramScraper()
 
-This class is made up of a series of bespoke and existing methods that allow for the scraping of Instagram post data. The pipeline consists of three main methods that need to be called sequentially.There is no current method to chain the whole pipeline. 
+This class is made up of a series of methods that allow for the scraping of Instagram post data. The pipeline consists of three main methods that need to be called sequentially.There is no current method to chain the whole pipeline. 
 
-`self.logIn()` : user detail capture, webdriver initialisation, Instagram log in
+`self.logIn()` : user detail capture, webdriver initialisation, Instagram log in. You will need to have an Instagram account to do this.
 
-`self.getLinks()` : gets n unique links containing <#HASHTAG> using webdriver. 
+`self.getLinks()` : gets n unique links containing <#HASHTAG> using WebDriver. 
 
 `self.getData()` : implements multi-threaded scraping of data from self.getLinks using a combination of Selenium WebDriver and Beautiful Soup. Method returns a pandas DataFrame
 
@@ -26,5 +26,9 @@ This class is made up of a series of methods that take the DataFrame from Instag
 `self.plotGraph(sizing=75,node_size='adjacency_frequency',layout=nx.kamada_kawai_layout,light_theme=True,colorscale='Viridis',community_plot=False)`:
 
 *sizing*: modify this to change the relative size of all nodes in the Plotly Scatterplot
-*node_size*: 
+*node_size*: choose a graph metric to reprent node size - betweeness_centrality,clustering_coefficient are alternatives to the default.
+*layout*: choose the nx.layout to plot
+*light_theme*: different Plot styles
+*colorscale*: colourscalefor gradient colouring
+*community_plot*: colours nodes as per community allocation if set True
 
