@@ -6,7 +6,7 @@ You will need to have an Instagram account to use InstagramScraper()
 
 This class is made up of a series of methods that allow for the scraping of Instagram post data. The pipeline consists of three main methods that need to be called sequentially.  There is no current method to chain the whole pipeline.
 
-`self.logIn()` : user detail capture, webdriver initialisation, Instagram log in.
+`self.logIn()` : user detail capture, WebDriver initialisation, Instagram log in.
 
 `self.getLinks()` : gets n unique links containing <#HASHTAG> using WebDriver.
 
@@ -59,7 +59,7 @@ This class is made up of a series of methods that take the DataFrame from Instag
 
 - *light_theme*: different Plot styles
 
-- *colorscale*: colourscalefor gradient colouring
+- *colorscale*: colourscale for gradient colouring
 
 - *community_plot*: colours nodes as per community allocation if set True
 
@@ -71,4 +71,4 @@ This class is made up of a series of methods that take the DataFrame from Instag
 
 `self.savePlot(plot='map')`: saves plots as HTML to local directory. Use 'community' if community sunburst plot needs to be saved
 
-`self.saveTables()`: saves all csv files to local directory - node DataFrame, edge DataFrame, intial processed DataFrame and selected DataFrame
+`self.saveTables()`: saves all csv files to local directory - node DataFrame, edge DataFrame, initial processed DataFrame and selected DataFrame
