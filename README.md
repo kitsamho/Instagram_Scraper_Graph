@@ -1,10 +1,10 @@
-There are two Python files here each containing a custom Instagram class
+There are two Python files here, each containing a custom Instagram class.You will need to have an Instagram account to use InstagramScraper()
 
 # InstagramScraper()
 
-This class is made up of a series of methods that allow for the scraping of Instagram post data. The pipeline consists of three main methods that need to be called sequentially.There is no current method to chain the whole pipeline. 
+This class is made up of a series of methods that allow for the scraping of Instagram post data. The pipeline consists of three main methods that need to be called sequentially.  There is no current method to chain the whole pipeline. 
 
-`self.logIn()` : user detail capture, webdriver initialisation, Instagram log in. You will need to have an Instagram account to do this.
+`self.logIn()` : user detail capture, webdriver initialisation, Instagram log in. 
 
 `self.getLinks()` : gets n unique links containing <#HASHTAG> using WebDriver. 
 
@@ -12,13 +12,23 @@ This class is made up of a series of methods that allow for the scraping of Inst
 
 # InstagramGraph()
 
-This class is made up of a series of methods that take the DataFrame from InstagramScraper(). As above, the methods below need to be called sequentially.There is no current method to chain the whole pipeline. 
+This class is made up of a series of methods that take the DataFrame from InstagramScraper(). The methods below need to be called sequentially.T here is no current method to chain the whole pipeline. 
 
-`self.getFeatures(translate=False)` : creates various descriptive metrics from the data and if translate set to True, will access Google Translate API and translate posts. 
+`self.getFeatures(translate=False)`: creates various descriptive metrics from the data.
 
-`self.selectData(english=True,remove_verified=True,max_posts=3,lemma=True)`:Subsets the data across various variables, filtering out non-English data, removing verified users, limiting post frequency and lemmatising any hashtags
+- *translate*: if True, will access the Google Translate API and identify post language. Due to API request limits, this may take some time depending on the volume of data.
 
-`selfbuildGraph(additional_stopwords=[],min_frequency=5)`: generates edges and nodes and adds them to an instance of a NetworkX graph object. 
+`self.selectData(english=True,remove_verified=True,max_posts=3,lemma=True)`:Subsets the data across various variables.
+
+- *english*: only include English language posts
+
+- *remove_verified*: removes verified Instagram users from the data set i.e brands
+
+- *max_posts* : set a threshold for user post frequency i.e. high volume posters
+
+- *lemma* : lemmatise hashtags where possible
+
+`self.buildGraph(additional_stopwords=[],min_frequency=5)`: generates edges and nodes and adds them to an instance of a NetworkX graph object. 
 
 - *additional_stopwords*: There are default stopwords however extra ones that are relevant to the topic scraped can be added.
 
@@ -28,7 +38,7 @@ This class is made up of a series of methods that take the DataFrame from Instag
 
 - *sizing*: modify this to change the relative size of all nodes in the Plotly Scatterplot
 
-- *node_size*: choose a graph metric to reprent node size - betweeness_centrality,clustering_coefficient are alternatives to the default.
+- *node_size*: choose a graph metric to represent the plot node size - betweeness_centrality,clustering_coefficient are alternatives to the default.
 
 - *layout*: choose the nx.layout to plot
 
