@@ -25,8 +25,8 @@ This class is made up of a series of methods that take the DataFrame from Instag
 
 `self.plotGraph(sizing=75,node_size='adjacency_frequency',layout=nx.kamada_kawai_layout,light_theme=True,colorscale='Viridis',community_plot=False)`:
 
-*sizing*: modify this to change the relative size of all nodes in the Plotly Scatterplot
-*node_size*: choose a graph metric to reprent node size - betweeness_centrality,clustering_coefficient are alternatives to the default.
+- *sizing*: modify this to change the relative size of all nodes in the Plotly Scatterplot
+- *node_size*: choose a graph metric to reprent node size - betweeness_centrality,clustering_coefficient are alternatives to the default.
 *layout*: choose the nx.layout to plot
 *light_theme*: different Plot styles
 *colorscale*: colourscalefor gradient colouring
