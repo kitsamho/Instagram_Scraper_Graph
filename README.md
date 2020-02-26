@@ -12,8 +12,9 @@ This class is made up of a series of methods that allow for the scraping of Inst
 
 `self.getData()` : implements multi-threaded scraping of data from self.getLinks using a combination of Selenium WebDriver and Beautiful Soup. Method returns a pandas DataFrame
 
-# InstagramGraph(csv,source_col='searched_for',post_col='post',user_col='user')
-
+# InstagramGraph()
+`csv,source_col='searched_for',post_col='post',user_col='user'`
+---  
 This class is made up of a series of methods that take the DataFrame from InstagramScraper(). The methods below need to be called sequentially.T here is no current method to chain the whole pipeline.
 
 - *csv*: specify path for input csv
