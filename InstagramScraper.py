@@ -60,55 +60,27 @@ class InstagramScraper():
 
         self.driver_loc = driver_loc
 
-        self.userDetails
-
-        self.openWebdriver
-
-        self.closeWebdriver
-
-        self.instagramLogin
-
-        self.multithreadCompile
-
-        self.multithreadExecute
-
-        self.getJson
-
-        self.setTarget
-
-        self.scrapeLinks
-
-        self.postDate
-
-        self.postUser
-
-        self.postVerifiedUser
-
-        self.postLikes
-
-        self.postVerifiedTags
-
-        self.postUnverifiedTags
-
-        self.postComment
-
-        self.postLocation
-
-        self.postAccessibility
-
-        self.logIn
-
-        self.getLinks
-
-        self.getData
-
-    """
-    Multi threading functions
-    """
-
     def multithreadCompile(self,thread_count,iteration_list,func):
 
-        jobs = []
+        """
+        This function compiles the batched needed for mult-threadding
+
+        Args:
+
+            thread_count is the number of threads used for multi-threadding
+
+            iteration_list is the source list of urls to iterate over
+
+            func is the function to be used in the multi-thredding process
+
+        Returns:
+
+            The batches that have been allocated to be run using the specified
+            function
+
+        """
+
+        jobs = [] #empty list for jobs
 
         #distribute iteration list to batches and append to jobs list
         batches = [i.tolist() for i in np.array_split(iteration_list,thread_count)]
@@ -117,10 +89,23 @@ class InstagramScraper():
 
             jobs.append(threading.Thread(target=func,args=[batches[i]]))
 
-
         return jobs
 
     def multithreadExecute(self,jobs):
+
+        """
+
+        This function executes the multi-threadding process
+
+        Args:
+
+            The batches that have been appended to a jobs list
+
+        Returns:
+
+            Nothing, merely executes the multi-threadding
+
+        """
 
         # Start the threads
         for j in jobs:
@@ -129,56 +114,106 @@ class InstagramScraper():
 
         # Ensure all of the threads have finished
         for j in jobs:
+
             j.join()
+
         return
 
-    """
-    JSON Functions
-    """
-    #exracts a JSON style dictionary from the html in any given unique Instagram URL
     def getJson(self,url):
 
-        page = urlopen(url).read()
+        """
+        This function exracts a JSON style dictionary from the html for any
+        given unique Instagram post
 
-        data=BeautifulSoup(page, 'html.parser')
+        Args:
 
-        body = data.find('body')
+            An Instagram post URL
 
-        script = body.find('script')
+        Returns:
 
+            JSON dictionary ouput
+
+        """
+
+        page = urlopen(url).read() #read url
+
+        data=BeautifulSoup(page, 'html.parser') #get a BeautifulSoup object
+
+        body = data.find('body') #find body element
+
+        script = body.find('script') #find script element
+
+        #some string formatting
         raw = script.text.strip().replace('window._sharedData =', '').replace(';', '')
 
+        #load string
         json_data=json.loads(raw)
 
-        return json_data
+        return json_data #return JSON dictonary
 
-    """
-    Functions that capture log in details and log user into Instagram
-    """
     def userDetails(self):
 
+        """
+        Functions that capture log in details and logs user into Instagram
+
+        Args:
+
+            None needed
+
+        Returns:
+
+            Nothing
+
+        """
         #capture username
         username = input('Enter username...')
 
         #capture password
         password = getpass.getpass('Enter password...')
 
-        self._password = password
+        self._password = password #retain password as attribute
 
-        self._username = username
+        self._username = username #retain user name as attribute
 
         return
 
     def openWebdriver(self):
 
+        """
+        Launches Chrome webdriver
+
+        Args:
+
+            None needed
+
+        Returns:
+
+            driver
+
+        """
+
         #intiate driver
         print("Launching driver...")
 
+        #retain current driver as attribute
         driver = webdriver.Chrome(self.driver_loc)
 
         return driver
 
     def closeWebdriver(self,driver):
+
+        """
+        Closes Chrome webdriver
+
+        Args:
+
+            webDriver
+
+        Returns:
+
+            Nothing
+
+        """
 
         driver.close()
 
@@ -186,14 +221,28 @@ class InstagramScraper():
 
     def instagramLogin(self,driver):
 
+        """
+        Logs in to Instagram
+
+        Args:
+
+            Current webdriver
+
+        Returns:
+
+            Current webdriver - logged into Instagram
+
+        """
+
+        #base url
         driver.get('https://www.instagram.com/accounts/login/?source=auth_switcher')
 
-        sleep(2)
+        sleep(2) #wait
 
         #log in
         username_field = driver.find_element_by_xpath('//*[@id="react-root"]/section/main/div/article/div/div[1]/div/form/div[2]/div/label/input')
 
-        username_field.click()
+        username_field.click() #click on username button
 
         #send username
         username_field.send_keys(self._username)
@@ -229,39 +278,64 @@ class InstagramScraper():
 
         return driver
 
-    """
-    Functions that set either a profile or a hashtag as a target and then
-    scrapes user specified number of post links
-    """
     def setTarget(self):
 
+        """
+        Function that sets either a profile or a hashtag as a target
+
+        Args:
+
+            None
+
+        Returns:
+
+            base url to scrape - either a hashtag page or a profile page
+
+        """
+
+        #tou can choose either hashtag search or a profile to search
         route = input('What do you want to scrape, profile posts or hashtags? (p/h)')
 
+        #if hashtags
         if route == 'h':
 
+            #set hashtag
             hashtag = input('Which hashtag do you want to scrape posts for: ')
 
-            self.target_label = '#'+hashtag
+            self.target_label = '#'+hashtag #retain hashtag as attribute
 
-            tag_url = 'https://www.instagram.com/explore/tags/'
+            tag_url = 'https://www.instagram.com/explore/tags/' #set base url
 
-            self._target = tag_url+hashtag
+            self._target = tag_url+hashtag #set url to scrape from
 
-            return self._target
+            return self._target #return url to scrape from
 
         else:
 
             profile = input('What profile do you want to scrape posts for: ')
 
-            self.target_label = '@'+profile
+            self.target_label = '@'+profile #retain profile as attribute
 
-            profile_url = 'https://www.instagram.com/'
+            profile_url = 'https://www.instagram.com/' #set base url
 
-            self._target = profile_url+profile
+            self._target = profile_url+profile #set url to scrape from
 
-            return self._target
+            return self._target #return url to scrape from
 
     def scrapeLinks(self,url):
+
+        """
+        Function that scrapes the links needed
+
+        Args:
+
+            target_url
+
+        Returns:
+
+            Nothing - but retains a list of urls to scrape
+
+        """
 
         #pass url as argument to Selenium webDriver, loads url
         self.activedriver.get(url)
@@ -346,31 +420,62 @@ class InstagramScraper():
         return
 
 
-    """
-    Methods that extract various fields of data from Instagram JSON dictionaries
-    """
-    #get date of post
     def postDate(self,data):
+
+        """
+        Function that gets the date of post
+        Args:
+            JSON dictionary for post
+        Returns:
+            datetime of post
+        """
 
         return datetime.utcfromtimestamp(data['entry_data']['PostPage'][0]['graphql']['shortcode_media']['taken_at_timestamp']).strftime('%Y-%m-%d %H:%M:%S')
 
-    #get user name
     def postUser(self,data):
 
+        """
+        Function that gets the username of the person who posted
+        Args:
+            JSON dictionary for post
+        Returns:
+            username
+        """
         return data['entry_data']['PostPage'][0]['graphql']['shortcode_media']['owner']['username']
 
-    #get verified status
     def postVerifiedUser(self,data):
 
+        """
+        Function gets the verified status of the user
+        Args:
+            JSON dictionary for post
+        Returns:
+            verified status
+        """
         return data['entry_data']['PostPage'][0]['graphql']['shortcode_media']['owner']['is_verified']
 
-    #get how many likes post has got
+
     def postLikes(self,data):
+
+        """
+        Function that gets the number of likes the post received
+        Args:
+            JSON dictionary for post
+        Returns:
+            number of likes
+        """
 
         return data['entry_data']['PostPage'][0]['graphql']['shortcode_media']['edge_media_preview_like']['count']
 
-    #get any verified tags
     def postVerifiedTags(self,data):
+
+        """
+        Function that gets the verified tags that a post contains
+        Args:
+            JSON dictionary for post
+        Returns:
+            the verified tags in the post
+        """
 
         tag_end_point = data['entry_data']['PostPage'][0]['graphql']['shortcode_media']['edge_media_to_tagged_user']['edges']
 
@@ -396,41 +501,60 @@ class InstagramScraper():
 
             return list(df.Brand)
 
-    #get any unverified tags
     def postUnverifiedTags(self,data):
+
+        """
+        Function that gets the unverified tags a post contains
+        Args:
+            JSON dictionary for post
+        Returns:
+            the unverified tags in the post
+        """
 
         tag_end_point = data['entry_data']['PostPage'][0]['graphql']['shortcode_media']['edge_media_to_tagged_user']['edges']
 
-        entities = []
+        tags = [] #emoty list for entities
 
-        verif = []
+        verif = [] #empty list for verified status
 
+        #loop through
         for i in range(len(tag_end_point)):
 
-            entities.append(tag_end_point[i]['node']['user']['full_name'])
+            #append entities
+            tags.append(tag_end_point[i]['node']['user']['full_name'])
 
+            #append verified status
             verif.append(tag_end_point[i]['node']['user']['is_verified'])
 
+        #DataFrame of verified / unverified tags
+        df = pd.DataFrame({'Tag':tags,'Verified':verif})
 
-        df = pd.DataFrame({'Entity':entities,'Verified':verif})
-
+        #subset on unverified tags
         df = df[df.Verified == False]
 
-        if len(list(df.Entity)) < 1:
+        #if there are unverified tags then return NaN else return unverified tags
+        if len(list(df.Tag)) < 1:
 
             return np.nan
 
         else:
 
-            return ''.join(list(df.Entity))
+            return ''.join(list(df.Tag))
 
-    #get post comment
     def postComment(self,data):
 
         return data['entry_data']['PostPage'][0]['graphql']['shortcode_media']['edge_media_to_caption']['edges'][0]['node']['text']
 
     #get location of post
     def postLocation(self,data):
+
+        """
+        Function that gets the post location if available
+        Args:
+            JSON dictionary for post
+        Returns:
+            the posts location
+        """
 
         try:
 

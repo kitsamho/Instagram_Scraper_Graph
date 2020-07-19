@@ -104,6 +104,12 @@ class InstagramGraph():
     #cleans and formats dataframe
     def cleaning(self,df,col):
 
+        """
+        Args:
+            DataFrame
+
+        """
+
         #drop nulls on post column
         self.df.dropna(subset=[self.post_col],inplace=True)
 
@@ -412,7 +418,6 @@ class InstagramGraph():
         #loop through and add each edge to the instance
         for i in edge_tuples:
             G.add_edge(i[0],i[1])
-
 
         return G
 
