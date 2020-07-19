@@ -56,6 +56,14 @@ import getpass
 
 class InstagramScraper():
 
+    """
+    Class that allows you to scrape the content of Instagram posts, either
+    a profile or a hashtag.
+
+    Initialised with the location of your Chromedriver location
+
+    """
+
     def __init__(self,driver_loc='/Users/sam/Desktop/Chromedriver/chromedriver'):
 
         self.driver_loc = driver_loc
@@ -568,6 +576,14 @@ class InstagramScraper():
     #get accessibility  / image data
     def postAccessibility(self,data):
 
+        """
+        Function that gets the post accessibility data if available
+        Args:
+            JSON dictionary for post
+        Returns:
+            the accessibility data
+        """
+
         try:
             try:
                 image = data['entry_data']['PostPage'][0]['graphql']['shortcode_media']['accessibility_caption'].replace('Image may contain: ','').replace(' and ',', ').replace('one or more ','')
@@ -648,6 +664,7 @@ class InstagramScraper():
 
         def extractData(links=self._links):
 
+            #loops through and calls each data collection function on each link
             for i in tqdm_notebook(range(len(links))):
 
                 try:
@@ -700,11 +717,10 @@ class InstagramScraper():
 
                                })
 
-#         df['post_hashtags'] = df['post'].map(self.getHashtags)
-
         df.sort_values(by='post_date',ascending=False,inplace=True)
 
-        df.reset_index(drop=True,inplace=True)
+        df.reset_index(drop=True,inplace=True) #reset index
 
-        self._df = df
+        self._df = df #retain final DataFrame as attribute
+
         return df
